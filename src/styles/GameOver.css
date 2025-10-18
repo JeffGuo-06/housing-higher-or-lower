@@ -1,0 +1,205 @@
+.game-over {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.game-over-content {
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+}
+
+.game-over-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--color-danger);
+  margin-bottom: 30px;
+  text-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.final-score {
+  background: var(--color-bg-light);
+  border-radius: 12px;
+  padding: 40px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.score-label {
+  font-size: 1.2rem;
+  color: var(--color-text-dim);
+  margin-bottom: 12px;
+}
+
+.final-score .score-value {
+  font-size: 5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 auto;
+  display: inline-block;
+}
+
+.score-submit-form {
+  background: var(--color-bg-light);
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.score-submit-form h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: var(--color-text);
+}
+
+.name-input {
+  width: 100%;
+  max-width: 400px;
+  padding: 14px 20px;
+  font-size: 1.1rem;
+  background: var(--color-bg);
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text);
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.name-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.name-input::placeholder {
+  color: var(--color-text-dim);
+}
+
+.error-message {
+  color: var(--color-danger);
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+
+.submit-button {
+  background: var(--color-secondary);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 14px 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  transition: all 0.3s ease;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: #0d9968;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.5);
+}
+
+.submit-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submission-success {
+  background: rgba(34, 197, 94, 0.1);
+  color: var(--color-success);
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  border: 2px solid rgba(34, 197, 94, 0.3);
+}
+
+.game-over-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.play-again-button {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 700;
+  padding: 16px 50px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+  transition: all 0.3s ease;
+}
+
+.play-again-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.5);
+}
+
+.play-again-button:active {
+  transform: translateY(0);
+}
+
+.view-leaderboard-button {
+  background: var(--color-bg-light);
+  color: var(--color-text);
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 14px 40px;
+  border-radius: 12px;
+  border: 2px solid var(--color-border);
+  transition: all 0.3s ease;
+}
+
+.view-leaderboard-button:hover {
+  background: var(--color-secondary);
+  color: white;
+  border-color: var(--color-secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.view-leaderboard-button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .game-over-title {
+    font-size: 2.5rem;
+  }
+
+  .final-score {
+    padding: 30px 20px;
+  }
+
+  .final-score .score-value {
+    font-size: 3.5rem;
+  }
+
+  .score-submit-form {
+    padding: 20px;
+  }
+
+  .score-submit-form h3 {
+    font-size: 1.3rem;
+  }
+
+  .name-input {
+    font-size: 1rem;
+    padding: 12px 16px;
+  }
+
+  .submit-button,
+  .play-again-button,
+  .view-leaderboard-button {
+    font-size: 1.1rem;
+    padding: 12px 30px;
+  }
+}

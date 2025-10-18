@@ -1,0 +1,121 @@
+.home-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.home-content {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+.game-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.game-subtitle {
+  font-size: 1.5rem;
+  color: var(--color-text-dim);
+  margin-bottom: 40px;
+}
+
+.rules-box {
+  background: var(--color-bg-light);
+  border-radius: 12px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.rules-box h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: var(--color-text);
+}
+
+.rules-list {
+  list-style: none;
+  text-align: left;
+  margin: 0 auto;
+  max-width: 400px;
+}
+
+.rules-list li {
+  padding: 12px 0;
+  color: var(--color-text);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  position: relative;
+  padding-left: 30px;
+}
+
+.rules-list li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--color-secondary);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.play-button {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: 18px 60px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.play-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.5);
+}
+
+.play-button:active {
+  transform: translateY(0);
+}
+
+.leaderboard-link {
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 1.1rem;
+  padding: 12px 24px;
+  text-decoration: underline;
+  transition: all 0.3s ease;
+}
+
+.leaderboard-link:hover {
+  color: var(--color-secondary);
+}
+
+@media (max-width: 768px) {
+  .game-title {
+    font-size: 2.5rem;
+  }
+
+  .game-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .rules-box {
+    padding: 20px;
+  }
+
+  .play-button {
+    font-size: 1.3rem;
+    padding: 16px 40px;
+  }
+}
