@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import Navbar from './components/Navbar'
 import HomeScreen from './components/HomeScreen'
 import GameScreen from './components/GameScreen'
@@ -37,35 +38,38 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <Navbar
-        onViewLeaderboard={gameState !== 'leaderboard' ? handleViewLeaderboard : null}
-        onGoHome={gameState !== 'home' ? handleBackToHome : null}
-      />
-
-      {gameState === 'home' && (
-        <HomeScreen
-          onStartGame={handleStartGame}
+    <>
+      <div className="app">
+        <Navbar
+          onViewLeaderboard={gameState !== 'leaderboard' ? handleViewLeaderboard : null}
+          onGoHome={gameState !== 'home' ? handleBackToHome : null}
         />
-      )}
 
-      {gameState === 'playing' && (
-        <GameScreen onGameOver={handleGameOver} />
-      )}
+        {gameState === 'home' && (
+          <HomeScreen
+            onStartGame={handleStartGame}
+          />
+        )}
 
-      {gameState === 'gameOver' && (
-        <GameOver
-          score={finalScore}
-          totalGuesses={finalTotalGuesses}
-          onPlayAgain={handlePlayAgain}
-          onViewLeaderboard={handleViewLeaderboard}
-        />
-      )}
+        {gameState === 'playing' && (
+          <GameScreen onGameOver={handleGameOver} />
+        )}
 
-      {gameState === 'leaderboard' && (
-        <LeaderboardPage onBack={handleBackToHome} />
-      )}
-    </div>
+        {gameState === 'gameOver' && (
+          <GameOver
+            score={finalScore}
+            totalGuesses={finalTotalGuesses}
+            onPlayAgain={handlePlayAgain}
+            onViewLeaderboard={handleViewLeaderboard}
+          />
+        )}
+
+        {gameState === 'leaderboard' && (
+          <LeaderboardPage onBack={handleBackToHome} />
+        )}
+      </div>
+      <Analytics />
+    </>
   )
 }
 
