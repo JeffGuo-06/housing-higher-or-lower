@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import CardIcon from './CardIcon'
 import { supabase } from '../lib/supabase'
 import '../styles/Leaderboard.css'
 
@@ -96,6 +97,7 @@ export default function Leaderboard({ limit = 10, showTitle = true }) {
               <div className="player-date">{formatDate(score.created_at)}</div>
             </div>
             <div className="score-info">
+              <CardIcon className="score-icon-small" />
               <div className="score-value">{score.score}</div>
             </div>
           </div>

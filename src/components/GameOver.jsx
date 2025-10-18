@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import CardIcon from './CardIcon'
 import { supabase } from '../lib/supabase'
 import '../styles/GameOver.css'
 
@@ -54,11 +55,12 @@ export default function GameOver({ score, totalGuesses, onPlayAgain, onViewLeade
   return (
     <div className="game-over">
       <div className="game-over-content">
-        <h1 className="game-over-title">GAME OVER!</h1>
-
         <div className="final-score">
           <div className="score-label">Your Final Score</div>
-          <div className="score-value">{score}</div>
+          <div className="score-display-large">
+            <CardIcon className="score-icon-large" />
+            <div className="score-value">{score}</div>
+          </div>
         </div>
 
         {!submitted ? (

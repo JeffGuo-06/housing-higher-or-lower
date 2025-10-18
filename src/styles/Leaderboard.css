@@ -2,7 +2,7 @@
   background: var(--color-bg-light);
   border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--color-border);
   max-width: 600px;
   margin: 0 auto;
 }
@@ -25,7 +25,7 @@
 }
 
 .leaderboard-error {
-  color: var(--color-danger);
+  color: var(--color-lower);
 }
 
 .leaderboard-list {
@@ -46,23 +46,23 @@
 }
 
 .leaderboard-item:hover {
-  background: rgba(37, 99, 235, 0.1);
+  background: var(--color-bg-dark);
   transform: translateX(4px);
 }
 
 .leaderboard-item.rank-1 {
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 100%);
-  border: 2px solid rgba(255, 215, 0, 0.3);
+  background: #fef9c3;
+  border: 2px solid #eab308;
 }
 
 .leaderboard-item.rank-2 {
-  background: linear-gradient(135deg, rgba(192, 192, 192, 0.15) 0%, rgba(192, 192, 192, 0.05) 100%);
-  border: 2px solid rgba(192, 192, 192, 0.3);
+  background: #f5f5f5;
+  border: 2px solid #a3a3a3;
 }
 
 .leaderboard-item.rank-3 {
-  background: linear-gradient(135deg, rgba(205, 127, 50, 0.15) 0%, rgba(205, 127, 50, 0.05) 100%);
-  border: 2px solid rgba(205, 127, 50, 0.3);
+  background: #fed7aa;
+  border: 2px solid #f97316;
 }
 
 .rank {
@@ -88,14 +88,23 @@
 }
 
 .score-info {
-  text-align: right;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
 }
 
-.score-value {
+.score-icon-small {
+  width: 24px;
+  height: 24px;
+  color: var(--color-neutral);
+  flex-shrink: 0;
+}
+
+.leaderboard .score-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--color-secondary);
-  display: block;
+  color: var(--color-text);
 }
 
 .show-more-button {
@@ -112,11 +121,10 @@
 }
 
 .show-more-button:hover:not(:disabled) {
-  background: var(--color-primary);
+  background: var(--color-neutral);
   color: white;
-  border-color: var(--color-primary);
+  border-color: var(--color-neutral);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
 }
 
 .show-more-button:active:not(:disabled) {
@@ -151,7 +159,12 @@
     font-size: 1rem;
   }
 
-  .score-value {
+  .score-icon-small {
+    width: 20px;
+    height: 20px;
+  }
+
+  .leaderboard .score-value {
     font-size: 1.3rem;
   }
 

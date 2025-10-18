@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import PropertyCard from './PropertyCard'
 import LoadingSpinner from './LoadingSpinner'
+import CardIcon from './CardIcon'
 import { supabase } from '../lib/supabase'
 import '../styles/GameScreen.css'
 
@@ -13,7 +14,9 @@ export default function GameScreen({ onGameOver }) {
   const [showRightPrice, setShowRightPrice] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [isSliding, setIsSliding] = useState(false)
+  const [isFalling, setIsFalling] = useState(false)
   const [scoreIncrement, setScoreIncrement] = useState(false)
+  const [scoreDecrement, setScoreDecrement] = useState(false)
 
   useEffect(() => {
     // Load initial two properties
@@ -64,10 +67,9 @@ export default function GameScreen({ onGameOver }) {
     setTotalGuesses(prev => prev + 1)
 
     // Determine if guess is correct
-    const isHigher = rightProperty.price > leftProperty.price
     const isCorrect =
-      (guess === 'higher' && isHigher) ||
-      (guess === 'lower' && !isHigher)
+      (guess === 'higher' && rightProperty.price >= leftProperty.price) ||
+      (guess === 'lower' && rightProperty.price <= leftProperty.price)
 
     if (isCorrect) {
       // Trigger score animation
@@ -103,8 +105,18 @@ export default function GameScreen({ onGameOver }) {
 
       setIsProcessing(false)
     } else {
-      // Wait to show the wrong result
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      // Trigger score decrement animation
+      setScoreDecrement(true)
+
+      // Wait a brief moment to show the price
+      await new Promise(resolve => setTimeout(resolve, 500))
+
+      // Start falling animation
+      setIsFalling(true)
+
+      // Wait for falling animation to complete
+      await new Promise(resolve => setTimeout(resolve, 800))
+
       // Wrong guess - game over
       onGameOver(score, totalGuesses)
     }
@@ -121,15 +133,8 @@ export default function GameScreen({ onGameOver }) {
   return (
     <div className="game-screen">
       <div className="game-header">
-        <div className={`score-display ${scoreIncrement ? 'score-increment' : ''}`}>
-          <svg className="score-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-            <path d="M4 22h16"></path>
-            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
-          </svg>
+        <div className={`score-display ${scoreIncrement ? 'score-increment' : ''} ${scoreDecrement ? 'score-decrement' : ''}`}>
+          <CardIcon className="score-icon" />
           <span className="score-value">{score}</span>
         </div>
       </div>
@@ -142,7 +147,7 @@ export default function GameScreen({ onGameOver }) {
 
           <div className="vs-divider">VS</div>
 
-          <div className={`property-right ${isSliding ? 'slide-left' : ''}`}>
+          <div className={`property-right ${isSliding ? 'slide-left' : ''} ${isFalling ? 'fall-down' : ''}`}>
             <PropertyCard property={rightProperty} showPrice={showRightPrice}>
               {!showRightPrice && !isProcessing && (
                 <div className="guess-buttons">

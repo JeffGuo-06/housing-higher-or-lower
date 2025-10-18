@@ -1,8 +1,5 @@
 .game-over {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 20px;
 }
 
@@ -10,14 +7,7 @@
   max-width: 700px;
   width: 100%;
   text-align: center;
-}
-
-.game-over-title {
-  font-size: 3.5rem;
-  font-weight: 800;
-  color: var(--color-danger);
-  margin-bottom: 30px;
-  text-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+  margin: 0 auto;
 }
 
 .final-score {
@@ -25,7 +15,7 @@
   border-radius: 12px;
   padding: 40px;
   margin-bottom: 30px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--color-border);
 }
 
 .score-label {
@@ -34,15 +24,26 @@
   margin-bottom: 12px;
 }
 
+.score-display-large {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.score-icon-large {
+  width: 60px;
+  height: 60px;
+  color: var(--color-neutral);
+  flex-shrink: 0;
+}
+
 .final-score .score-value {
   font-size: 5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin: 0 auto;
-  display: inline-block;
+  color: var(--color-neutral);
+  margin: 0;
+  line-height: 1;
 }
 
 .score-submit-form {
@@ -50,7 +51,7 @@
   border-radius: 12px;
   padding: 30px;
   margin-bottom: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--color-border);
 }
 
 .score-submit-form h3 {
@@ -68,14 +69,14 @@
   border: 2px solid var(--color-border);
   border-radius: 8px;
   color: var(--color-text);
+  margin-right: 16px;
   margin-bottom: 16px;
   transition: all 0.3s ease;
 }
 
 .name-input:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  border-color: var(--color-neutral);
 }
 
 .name-input::placeholder {
@@ -83,26 +84,24 @@
 }
 
 .error-message {
-  color: var(--color-danger);
+  color: var(--color-lower);
   font-size: 0.95rem;
   margin-bottom: 12px;
 }
 
 .submit-button {
-  background: var(--color-secondary);
+  background: var(--color-higher);
   color: white;
   font-size: 1.2rem;
   font-weight: 700;
   padding: 14px 40px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
   transition: all 0.3s ease;
 }
 
 .submit-button:hover:not(:disabled) {
-  background: #0d9968;
+  background: #16a34a;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.5);
 }
 
 .submit-button:active:not(:disabled) {
@@ -110,14 +109,14 @@
 }
 
 .submission-success {
-  background: rgba(34, 197, 94, 0.1);
-  color: var(--color-success);
+  background: var(--color-bg-dark);
+  color: var(--color-higher);
   padding: 20px;
   border-radius: 8px;
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 20px;
-  border: 2px solid rgba(34, 197, 94, 0.3);
+  border: 2px solid var(--color-higher);
 }
 
 .game-over-actions {
@@ -128,19 +127,18 @@
 }
 
 .play-again-button {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  background: var(--color-neutral);
   color: white;
   font-size: 1.3rem;
   font-weight: 700;
   padding: 16px 50px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
   transition: all 0.3s ease;
 }
 
 .play-again-button:hover {
+  background: var(--color-text);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.5);
 }
 
 .play-again-button:active {
@@ -149,21 +147,20 @@
 
 .view-leaderboard-button {
   background: var(--color-bg-light);
-  color: var(--color-text);
+  color: var(--color-neutral);
   font-size: 1.2rem;
   font-weight: 700;
   padding: 14px 40px;
   border-radius: 12px;
-  border: 2px solid var(--color-border);
+  border: 2px solid var(--color-neutral);
   transition: all 0.3s ease;
 }
 
 .view-leaderboard-button:hover {
-  background: var(--color-secondary);
+  background: var(--color-neutral);
   color: white;
-  border-color: var(--color-secondary);
+  border-color: var(--color-neutral);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
 }
 
 .view-leaderboard-button:active {
@@ -171,12 +168,13 @@
 }
 
 @media (max-width: 768px) {
-  .game-over-title {
-    font-size: 2.5rem;
-  }
-
   .final-score {
     padding: 30px 20px;
+  }
+
+  .score-icon-large {
+    width: 45px;
+    height: 45px;
   }
 
   .final-score .score-value {

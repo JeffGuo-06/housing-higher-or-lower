@@ -1,12 +1,9 @@
 import '../styles/HomeScreen.css'
 
-export default function HomeScreen({ onStartGame, onViewLeaderboard }) {
+export default function HomeScreen({ onStartGame }) {
   return (
     <div className="home-screen">
       <div className="home-content">
-        <h1 className="game-title">HIGHER or LOWER</h1>
-        <p className="game-subtitle">Property Edition</p>
-
         <div className="rules-box">
           <h2>How to Play</h2>
           <ul className="rules-list">
@@ -19,10 +16,6 @@ export default function HomeScreen({ onStartGame, onViewLeaderboard }) {
 
         <button className="play-button" onClick={onStartGame}>
           PLAY NOW
-        </button>
-
-        <button className="leaderboard-link" onClick={onViewLeaderboard}>
-          View Leaderboard
         </button>
       </div>
     </div>

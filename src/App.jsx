@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Navbar from './components/Navbar'
 import HomeScreen from './components/HomeScreen'
 import GameScreen from './components/GameScreen'
 import GameOver from './components/GameOver'
@@ -37,10 +38,14 @@ function App() {
 
   return (
     <div className="app">
+      <Navbar
+        onViewLeaderboard={gameState !== 'leaderboard' ? handleViewLeaderboard : null}
+        onGoHome={gameState !== 'home' ? handleBackToHome : null}
+      />
+
       {gameState === 'home' && (
         <HomeScreen
           onStartGame={handleStartGame}
-          onViewLeaderboard={handleViewLeaderboard}
         />
       )}
 

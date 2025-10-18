@@ -1,24 +1,23 @@
 .home-screen {
-  min-height: 100vh;
+  height: calc(100vh - 88px);
+  padding: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  overflow: hidden;
 }
 
 .home-content {
   max-width: 600px;
   width: 100%;
   text-align: center;
+  margin: 0 auto;
 }
 
 .game-title {
   font-size: 3.5rem;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-text);
   margin-bottom: 8px;
 }
 
@@ -31,9 +30,9 @@
 .rules-box {
   background: var(--color-bg-light);
   border-radius: 12px;
-  padding: 30px;
+  padding: 50px;
   margin-bottom: 30px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--color-border);
 }
 
 .rules-box h2 {
@@ -62,43 +61,29 @@
   content: "✓";
   position: absolute;
   left: 0;
-  color: var(--color-secondary);
+  color: var(--color-higher);
   font-weight: bold;
   font-size: 1.2rem;
 }
 
 .play-button {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  background: var(--color-neutral);
   color: white;
   font-size: 1.5rem;
   font-weight: 700;
   padding: 18px 60px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
   margin-bottom: 20px;
   transition: all 0.3s ease;
 }
 
 .play-button:hover {
+  background: var(--color-text);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.5);
 }
 
 .play-button:active {
   transform: translateY(0);
-}
-
-.leaderboard-link {
-  background: transparent;
-  color: var(--color-primary);
-  font-size: 1.1rem;
-  padding: 12px 24px;
-  text-decoration: underline;
-  transition: all 0.3s ease;
-}
-
-.leaderboard-link:hover {
-  color: var(--color-secondary);
 }
 
 @media (max-width: 768px) {
@@ -111,7 +96,7 @@
   }
 
   .rules-box {
-    padding: 20px;
+    padding: 35px;
   }
 
   .play-button {

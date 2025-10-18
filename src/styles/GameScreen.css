@@ -13,15 +13,16 @@
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  background: var(--color-bg-light);
+  background: var(--color-neutral);
   padding: 12px 30px;
   border-radius: 50px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  border: 3px solid var(--color-neutral);
   transition: all 0.4s ease;
 }
 
 .score-display.score-increment {
-  background: var(--color-success);
+  background: var(--color-higher);
+  border-color: var(--color-higher);
   animation: scoreFlash 0.8s ease;
 }
 
@@ -31,17 +32,29 @@
   color: white;
 }
 
+.score-display.score-decrement {
+  background: var(--color-lower);
+  border-color: var(--color-lower);
+  animation: scoreFlashRed 0.8s ease;
+}
+
+.score-display.score-decrement .score-icon,
+.score-display.score-decrement .score-value {
+  animation: scorePulse 0.4s ease;
+  color: white;
+}
+
 .score-icon {
   width: 28px;
   height: 28px;
-  color: var(--color-secondary);
+  color: white;
   flex-shrink: 0;
 }
 
-.score-value {
+.score-display .score-value {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--color-secondary);
+  color: white;
   line-height: 1;
   display: flex;
   align-items: center;
@@ -68,13 +81,17 @@
 }
 
 .property-right.slide-left {
-  animation: slidePropertyLeft 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slidePropertyLeft 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.property-right.fall-down {
+  animation: fallOffPage 0.8s cubic-bezier(0.6, 0, 1, 1) forwards;
 }
 
 .vs-divider {
   font-size: 2rem;
   font-weight: 800;
-  color: var(--color-text-dim);
+  color: var(--color-text);
   padding: 20px;
   background: var(--color-bg-light);
   border-radius: 50%;
@@ -83,7 +100,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  border: 3px solid var(--color-border);
   align-self: start;
   margin-top: 20vh;
 }
@@ -106,25 +123,27 @@
 }
 
 .guess-button.higher {
-  border-color: var(--color-secondary);
+  background: var(--color-higher);
+  color: white;
+  border-color: var(--color-higher);
 }
 
 .guess-button.higher:hover {
-  background: var(--color-secondary);
-  color: white;
+  background: #16a34a;
+  border-color: #16a34a;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
 }
 
 .guess-button.lower {
-  border-color: var(--color-danger);
+  background: var(--color-lower);
+  color: white;
+  border-color: var(--color-lower);
 }
 
 .guess-button.lower:hover {
-  background: var(--color-danger);
-  color: white;
+  background: #dc2626;
+  border-color: #dc2626;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
 }
 
 .feedback-overlay {
@@ -158,12 +177,12 @@
 }
 
 .feedback-overlay.correct .feedback-message {
-  background: var(--color-success);
+  background: var(--color-higher);
   color: white;
 }
 
 .feedback-overlay.wrong .feedback-message {
-  background: var(--color-danger);
+  background: var(--color-lower);
   color: white;
 }
 
@@ -192,21 +211,76 @@
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-120%);
+    transform: translateX(calc(-100% - 140px));
+  }
+}
+
+@keyframes slidePropertyUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(calc(-100% - 100px));
+  }
+}
+
+@keyframes fallOffPage {
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  10% {
+    transform: translateX(-5px) translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  20% {
+    transform: translateX(5px) translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  30% {
+    transform: translateX(-5px) translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  40% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  55% {
+    transform: translateX(0) translateY(30px) rotate(5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0) translateY(150vh) rotate(25deg);
+    opacity: 0;
   }
 }
 
 @keyframes scoreFlash {
   0% {
-    background: var(--color-bg-light);
+    background: var(--color-neutral);
     transform: scale(1);
   }
   30% {
-    background: var(--color-success);
+    background: var(--color-higher);
     transform: scale(1.15);
   }
   100% {
-    background: var(--color-success);
+    background: var(--color-higher);
+    transform: scale(1);
+  }
+}
+
+@keyframes scoreFlashRed {
+  0% {
+    background: var(--color-neutral);
+    transform: scale(1);
+  }
+  30% {
+    background: var(--color-lower);
+    transform: scale(1.15);
+  }
+  100% {
+    background: var(--color-lower);
     transform: scale(1);
   }
 }
@@ -238,6 +312,10 @@
     font-size: 3rem;
     padding: 30px 40px;
   }
+
+  .property-right.slide-left {
+    animation: slidePropertyUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
 }
 
 @media (max-width: 768px) {
@@ -250,7 +328,7 @@
     height: 22px;
   }
 
-  .score-value {
+  .score-display .score-value {
     font-size: 1.5rem;
   }
 
