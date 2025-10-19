@@ -1,0 +1,272 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background: var(--color-bg-light);
+  border-radius: 16px;
+  border: 3px solid var(--color-border);
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 30px;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.modal-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.modal-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  border: 2px solid var(--color-border);
+  color: var(--color-text);
+  font-size: 2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  line-height: 0;
+  padding: 0;
+  padding-bottom: 5px;
+}
+
+.modal-close:hover {
+  background: var(--color-lower);
+  border-color: var(--color-lower);
+  color: white;
+  transform: rotate(90deg);
+}
+
+.modal-body {
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.loading-text,
+.error-text,
+.empty-text {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 1.2rem;
+  color: var(--color-text-dim);
+}
+
+.error-text {
+  color: var(--color-lower);
+}
+
+.packs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pack-row {
+  background: var(--color-bg);
+  border: 3px solid var(--color-border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.pack-row:not(.disabled):hover {
+  border-color: var(--color-higher);
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.pack-row.current {
+  border-color: var(--color-higher);
+  background: linear-gradient(90deg, var(--color-bg) 0%, rgba(34, 197, 94, 0.05) 100%);
+  box-shadow: 0 0 0 1px var(--color-higher);
+}
+
+.pack-row.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pack-info {
+  flex: 1;
+}
+
+.pack-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.pack-name {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.legacy-badge {
+  background: var(--color-neutral);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.current-indicator {
+  background: var(--color-higher);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pack-description {
+  font-size: 0.95rem;
+  color: var(--color-text-dim);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.pack-property-count {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--color-bg-light);
+  border-radius: 8px;
+  border: 2px solid var(--color-border);
+}
+
+.house-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--color-text);
+}
+
+.property-count {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-text);
+  min-width: 60px;
+  text-align: left;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .modal-content {
+    max-height: 95vh;
+  }
+
+  .modal-header {
+    padding: 20px;
+  }
+
+  .modal-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .modal-close {
+    width: 36px;
+    height: 36px;
+    font-size: 1.5rem;
+  }
+
+  .modal-body {
+    padding: 20px;
+  }
+
+  .pack-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 20px;
+  }
+
+  .pack-row:not(.disabled):hover {
+    transform: translateY(-2px);
+  }
+
+  .pack-name {
+    font-size: 1.5rem;
+  }
+
+  .pack-title {
+    flex-wrap: wrap;
+  }
+
+  .pack-property-count {
+    align-self: stretch;
+    justify-content: center;
+  }
+
+  .house-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .property-count {
+    font-size: 1.3rem;
+  }
+}

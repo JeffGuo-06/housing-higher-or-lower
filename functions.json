@@ -1,0 +1,56 @@
+[
+  {
+    "schema": "public",
+    "function_name": "get_all_packs_with_stats",
+    "arguments": "",
+    "return_type": "TABLE(id integer, name character varying, description text, difficulty character varying, property_count integer, total_players integer, total_scores integer, highest_score integer, is_active boolean)",
+    "volatility": "STABLE",
+    "language": "plpgsql",
+    "full_definition": "CREATE OR REPLACE FUNCTION public.get_all_packs_with_stats()\n RETURNS TABLE(id integer, name character varying, description text, difficulty character varying, property_count integer, total_players integer, total_scores integer, highest_score integer, is_active boolean)\n LANGUAGE plpgsql\n STABLE\nAS $function$\nBEGIN\n  RETURN QUERY\n  SELECT\n    p.id,\n    p.name,\n    p.description,\n    p.difficulty,\n    p.property_count,\n    COUNT(DISTINCT l.player_name)::INTEGER as total_players,\n    COUNT(l.id)::INTEGER as total_scores,\n    COALESCE(MAX(l.score), 0) as highest_score,\n    p.is_active\n  FROM packs p\n  LEFT JOIN leaderboard l ON p.id = l.pack_id\n  WHERE p.is_active = true\n  GROUP BY p.id, p.name, p.description, p.difficulty, p.property_count, p.is_active\n  ORDER BY p.id;\nEND;\n$function$\n"
+  },
+  {
+    "schema": "public",
+    "function_name": "get_pack_stats",
+    "arguments": "filter_pack_id integer",
+    "return_type": "TABLE(pack_id integer, pack_name character varying, total_players integer, avg_score numeric, highest_score integer, total_games integer)",
+    "volatility": "STABLE",
+    "language": "plpgsql",
+    "full_definition": "CREATE OR REPLACE FUNCTION public.get_pack_stats(filter_pack_id integer)\n RETURNS TABLE(pack_id integer, pack_name character varying, total_players integer, avg_score numeric, highest_score integer, total_games integer)\n LANGUAGE plpgsql\n STABLE\nAS $function$\nBEGIN\n  RETURN QUERY\n  SELECT\n    p.id,\n    p.name,\n    COUNT(DISTINCT l.player_name)::INTEGER as total_players,\n    ROUND(AVG(l.score), 2) as avg_score,\n    MAX(l.score) as highest_score,\n    COUNT(l.id)::INTEGER as total_games\n  FROM packs p\n  LEFT JOIN leaderboard l ON p.id = l.pack_id\n  WHERE p.id = filter_pack_id\n  GROUP BY p.id, p.name;\nEND;\n$function$\n"
+  },
+  {
+    "schema": "public",
+    "function_name": "get_property_pair",
+    "arguments": "property_country character DEFAULT 'US'::bpchar",
+    "return_type": "TABLE(id uuid, mls_number character varying, address text, city character varying, state character varying, province character varying, country character, price integer, bedrooms character varying, bathrooms character varying, sqft integer, property_type character varying, image_url text, listing_url text, latitude numeric, longitude numeric)",
+    "volatility": "STABLE",
+    "language": "plpgsql",
+    "full_definition": "CREATE OR REPLACE FUNCTION public.get_property_pair(property_country character DEFAULT 'US'::bpchar)\n RETURNS TABLE(id uuid, mls_number character varying, address text, city character varying, state character varying, province character varying, country character, price integer, bedrooms character varying, bathrooms character varying, sqft integer, property_type character varying, image_url text, listing_url text, latitude numeric, longitude numeric)\n LANGUAGE plpgsql\n STABLE\nAS $function$\nBEGIN\n  RETURN QUERY\n  SELECT\n    p.id,\n    p.mls_number,\n    p.address,\n    p.city,\n    p.state,\n    p.province,\n    p.country,\n    p.price,\n    p.bedrooms,\n    p.bathrooms,\n    p.sqft,\n    p.property_type,\n    p.image_url,\n    p.listing_url,\n    p.latitude,\n    p.longitude\n  FROM properties p\n  WHERE p.country = property_country\n  ORDER BY RANDOM()\n  LIMIT 2;\nEND;\n$function$\n"
+  },
+  {
+    "schema": "public",
+    "function_name": "get_random_property",
+    "arguments": "property_country character varying, filter_pack_id integer DEFAULT NULL::integer",
+    "return_type": "TABLE(id uuid, mls_number character varying, property_id character varying, address text, city character varying, state character varying, province character varying, postal_code character varying, country character varying, latitude numeric, longitude numeric, price integer, bedrooms integer, bathrooms integer, sqft integer, lot_size character varying, year_built integer, property_type character varying, listing_url text, image_url text, image_url_med text, image_url_low text, local_image_path text, pack_id integer)",
+    "volatility": "STABLE",
+    "language": "plpgsql",
+    "full_definition": "CREATE OR REPLACE FUNCTION public.get_random_property(property_country character varying, filter_pack_id integer DEFAULT NULL::integer)\n RETURNS TABLE(id uuid, mls_number character varying, property_id character varying, address text, city character varying, state character varying, province character varying, postal_code character varying, country character varying, latitude numeric, longitude numeric, price integer, bedrooms integer, bathrooms integer, sqft integer, lot_size character varying, year_built integer, property_type character varying, listing_url text, image_url text, image_url_med text, image_url_low text, local_image_path text, pack_id integer)\n LANGUAGE plpgsql\n STABLE\nAS $function$\nBEGIN\n  RETURN QUERY\n  SELECT\n    p.id,\n    p.mls_number,\n    p.property_id,\n    p.address,\n    p.city,\n    p.state,\n    p.province,\n    p.postal_code,\n    p.country,\n    p.latitude,\n    p.longitude,\n    p.price,\n    p.bedrooms,\n    p.bathrooms,\n    p.sqft,\n    p.lot_size,\n    p.year_built,\n    p.property_type,\n    p.listing_url,\n    p.image_url,\n    p.image_url_med,\n    p.image_url_low,\n    p.local_image_path,\n    COALESCE(p.pack_id, 1) as pack_id -- Default to Pack 1 if NULL\n  FROM properties p\n  WHERE p.country = property_country\n    AND (filter_pack_id IS NULL OR COALESCE(p.pack_id, 1) = filter_pack_id)\n  ORDER BY RANDOM()\n  LIMIT 1;\nEND;\n$function$\n"
+  },
+  {
+    "schema": "public",
+    "function_name": "get_top_scores",
+    "arguments": "limit_count integer DEFAULT 10, filter_pack_id integer DEFAULT NULL::integer",
+    "return_type": "TABLE(id uuid, player_name character varying, score integer, correct_guesses integer, total_guesses integer, pack_id integer, created_at timestamp with time zone)",
+    "volatility": "STABLE",
+    "language": "plpgsql",
+    "full_definition": "CREATE OR REPLACE FUNCTION public.get_top_scores(limit_count integer DEFAULT 10, filter_pack_id integer DEFAULT NULL::integer)\n RETURNS TABLE(id uuid, player_name character varying, score integer, correct_guesses integer, total_guesses integer, pack_id integer, created_at timestamp with time zone)\n LANGUAGE plpgsql\n STABLE\nAS $function$\nBEGIN\n  RETURN QUERY\n  SELECT\n    l.id,\n    l.player_name,\n    l.score,\n    l.correct_guesses,\n    l.total_guesses,\n    l.pack_id,\n    l.created_at\n  FROM leaderboard l\n  WHERE (filter_pack_id IS NULL OR l.pack_id = filter_pack_id)\n  ORDER BY l.score DESC, l.created_at ASC\n  LIMIT limit_count;\nEND;\n$function$\n"
+  },
+  {
+    "schema": "public",
+    "function_name": "update_updated_at_column",
+    "arguments": "",
+    "return_type": "trigger",
+    "volatility": "VOLATILE",
+    "language": "plpgsql",
+    "full_definition": "CREATE OR REPLACE FUNCTION public.update_updated_at_column()\n RETURNS trigger\n LANGUAGE plpgsql\nAS $function$\nBEGIN\n  NEW.updated_at = TIMEZONE('utc'::text, NOW());\n  RETURN NEW;\nEND;\n$function$\n"
+  }
+]

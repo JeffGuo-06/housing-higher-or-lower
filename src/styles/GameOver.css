@@ -46,6 +46,47 @@
   line-height: 1;
 }
 
+.percentile-display {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 2px solid var(--color-border);
+}
+
+.percentile-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin: 0;
+  color: var(--color-text);
+}
+
+.percentile-text strong {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.percentile-text.first-score {
+  color: var(--color-higher);
+  font-weight: 700;
+}
+
+.percentile-text.top-tier {
+  color: var(--color-higher);
+  font-weight: 600;
+}
+
+.percentile-text.good {
+  color: var(--color-neutral);
+  font-weight: 600;
+}
+
+.percentile-text.average {
+  color: var(--color-text);
+}
+
+.percentile-text.below-average {
+  color: var(--color-text-dim);
+}
+
 .score-submit-form {
   background: var(--color-bg-light);
   border-radius: 12px;

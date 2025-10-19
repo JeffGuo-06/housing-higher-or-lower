@@ -5,7 +5,7 @@ import CardIcon from './CardIcon'
 import { supabase } from '../lib/supabase'
 import '../styles/GameScreen.css'
 
-export default function GameScreen({ onGameOver }) {
+export default function GameScreen({ onGameOver, packId = 2 }) {
   const [leftProperty, setLeftProperty] = useState(null)
   const [rightProperty, setRightProperty] = useState(null)
   const [score, setScore] = useState(0)
@@ -21,7 +21,7 @@ export default function GameScreen({ onGameOver }) {
   useEffect(() => {
     // Load initial two properties
     loadInitialProperties()
-  }, [])
+  }, [packId])
 
   const loadInitialProperties = async () => {
     try {
@@ -43,9 +43,12 @@ export default function GameScreen({ onGameOver }) {
   }
 
   const fetchRandomProperty = async () => {
-    // Call Supabase function to get random property
+    // Call Supabase function to get random property with pack filter
     const { data, error } = await supabase
-      .rpc('get_random_property', { property_country: 'CA' })
+      .rpc('get_random_property', {
+        property_country: 'CA',
+        filter_pack_id: packId
+      })
 
     if (error) {
       console.error('Supabase error:', error)

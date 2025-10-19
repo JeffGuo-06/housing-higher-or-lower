@@ -101,9 +101,14 @@ class RealtorSeleniumScraper:
 
         print("Chrome driver initialized")
 
-    def search_city(self, city: str, max_properties: int = 500) -> List[Dict]:
+    def search_city(self, city: str, max_properties: int = 500, max_pages: int = 10) -> List[Dict]:
         """
-        Search for properties in a city by loading the map view
+        Search for properties in a city by loading the map view and paginating through results
+
+        Args:
+            city: City name to search (e.g., "Toronto, ON")
+            max_properties: Maximum number of properties to collect for this city
+            max_pages: Maximum number of pages to scrape (default: 10)
         """
         properties = []
         max_refresh_attempts = 5
@@ -189,37 +194,98 @@ class RealtorSeleniumScraper:
                         print(f"  ✗ Failed to load after {max_refresh_attempts} attempts, skipping {city}")
                         return []
 
-            # Scroll to load more properties (lazy-loaded by Realtor.ca)
-            # Keep it simple and fast - just 5 quick scrolls
-            print("  Scrolling to load more properties...")
-            for i in range(5):
-                try:
-                    # Scroll to bottom
-                    self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                    time.sleep(1.5)  # Short wait for lazy-load
-                except Exception as e:
-                    print(f"    Warning: Scroll failed, continuing with what we have...")
+            # NEW: Pagination loop - scrape multiple pages
+            page_num = 1
+            while page_num <= max_pages and len(properties) < max_properties:
+                print(f"\n  --- Page {page_num} ---")
+
+                # Scroll to load more properties (lazy-loaded by Realtor.ca)
+                print("  Scrolling to load more properties...")
+                for i in range(5):
+                    try:
+                        # Scroll to bottom
+                        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                        time.sleep(1.5)  # Short wait for lazy-load
+                    except Exception as e:
+                        print(f"    Warning: Scroll failed, continuing with what we have...")
+                        break
+
+                # Extract property cards (use correct class name from actual DOM)
+                property_cards = self.driver.find_elements(By.CLASS_NAME, "listingCard")
+                print(f"  Found {len(property_cards)} property cards on page {page_num}")
+
+                # Extract properties from this page
+                page_properties = 0
+                for i, card in enumerate(property_cards, 1):
+                    if len(properties) >= max_properties:
+                        break
+
+                    try:
+                        property_data = self._extract_property_from_card(card)
+                        if property_data:
+                            properties.append(property_data)
+                            page_properties += 1
+                            if i == 1 and page_num == 1:  # Debug first property of first page
+                                print(f"    ✓ First property: {property_data.get('address', 'No addr')[:40]} - ${property_data.get('price', 0):,}")
+                        else:
+                            if i <= 3 and page_num == 1:  # Debug first 3 failures on first page
+                                print(f"    ✗ Card {i}: Failed extraction (likely missing price or address)")
+                    except Exception as e:
+                        print(f"    ✗ Card {i}: Error - {str(e)[:60]}")
+                        continue
+
+                print(f"  Extracted {page_properties} properties from page {page_num} (total: {len(properties)})")
+
+                # Check if we've hit our target
+                if len(properties) >= max_properties:
+                    print(f"  ✓ Reached target of {max_properties} properties")
                     break
 
-            # Extract property cards (use correct class name from actual DOM)
-            property_cards = self.driver.find_elements(By.CLASS_NAME, "listingCard")
-            print(f"  Found {len(property_cards)} property cards")
-
-            for i, card in enumerate(property_cards[:max_properties], 1):
+                # Try to find and click the "Next" button
                 try:
-                    property_data = self._extract_property_from_card(card)
-                    if property_data:
-                        properties.append(property_data)
-                        if i == 1:  # Debug first property
-                            print(f"    ✓ First property: {property_data.get('address', 'No addr')[:40]} - ${property_data.get('price', 0):,}")
-                    else:
-                        if i <= 3:  # Debug first 3 failures
-                            print(f"    ✗ Card {i}: Failed extraction (likely missing price or address)")
-                except Exception as e:
-                    print(f"    ✗ Card {i}: Error - {str(e)[:60]}")
-                    continue
+                    # Scroll to pagination area first
+                    self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    time.sleep(1.5)
 
-            print(f"  Extracted {len(properties)} properties")
+                    # Wait for the next button to be present
+                    next_button = WebDriverWait(self.driver, 5).until(
+                        EC.presence_of_element_located((By.CLASS_NAME, "lnkNextResultsPage"))
+                    )
+
+                    # Check if it's disabled or hidden
+                    is_disabled = next_button.get_attribute("disabled")
+                    is_hidden = next_button.get_attribute("style")
+                    aria_disabled = next_button.get_attribute("aria-disabled")
+
+                    if is_disabled or aria_disabled == "true" or (is_hidden and "display: none" in is_hidden):
+                        print(f"  ✓ Reached last page (Next button disabled)")
+                        break
+
+                    # Scroll the button into view
+                    self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", next_button)
+                    time.sleep(0.5)
+
+                    # Click the next button using JavaScript (more reliable than regular click)
+                    print(f"  Clicking 'Next' to load page {page_num + 1}...")
+                    self.driver.execute_script("arguments[0].click();", next_button)
+
+                    # Wait for new page to load
+                    time.sleep(3)
+
+                    # Wait for property cards to reload
+                    try:
+                        WebDriverWait(self.driver, 10).until(
+                            EC.presence_of_element_located((By.CLASS_NAME, "listingCard"))
+                        )
+                    except:
+                        print("  ⚠ Timeout waiting for next page to load")
+
+                    page_num += 1
+
+                except Exception as e:
+                    print(f"  ✗ Could not find/click Next button: {str(e)[:60]}")
+                    print(f"  Assuming this is the last page")
+                    break
 
         except Exception as e:
             print(f"  Error searching {city}: {str(e)}")

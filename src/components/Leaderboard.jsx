@@ -3,7 +3,7 @@ import CardIcon from './CardIcon'
 import { supabase } from '../lib/supabase'
 import '../styles/Leaderboard.css'
 
-export default function Leaderboard({ limit = 10, showTitle = true }) {
+export default function Leaderboard({ limit = 10, showTitle = true, packId = 2 }) {
   const [scores, setScores] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -13,7 +13,7 @@ export default function Leaderboard({ limit = 10, showTitle = true }) {
 
   useEffect(() => {
     fetchLeaderboard()
-  }, [])
+  }, [packId])
 
   const fetchLeaderboard = async (newLimit = displayLimit) => {
     try {
@@ -22,7 +22,10 @@ export default function Leaderboard({ limit = 10, showTitle = true }) {
 
       // Fetch one extra to check if there are more scores
       const { data, error: supabaseError } = await supabase
-        .rpc('get_top_scores', { limit_count: newLimit + 1 })
+        .rpc('get_top_scores', {
+          limit_count: newLimit + 1,
+          filter_pack_id: packId
+        })
 
       if (supabaseError) {
         throw new Error('Failed to fetch leaderboard')

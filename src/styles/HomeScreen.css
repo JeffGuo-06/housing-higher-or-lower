@@ -12,6 +12,7 @@
   width: 100%;
   text-align: center;
   margin: 0 auto;
+  position: relative;
 }
 
 .game-title {
@@ -86,6 +87,68 @@
   transform: translateY(0);
 }
 
+.more-packs-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--color-bg-light);
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: 2px solid var(--color-border);
+  transition: all 0.3s ease;
+}
+
+.more-packs-button:hover {
+  background: var(--color-neutral);
+  color: white;
+  border-color: var(--color-neutral);
+  transform: translateY(-2px);
+}
+
+.cta-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.play-button.main-cta {
+  background: var(--color-text);
+  padding: 24px 60px;
+  box-shadow: 0 8px 20px rgba(26, 26, 26, 0.3);
+}
+
+.play-button.main-cta:hover {
+  background: var(--color-neutral);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(26, 26, 26, 0.4);
+}
+
+.pack-selected {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-dim);
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pack-subtitle {
+  font-size: 1rem;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.pack-info {
+  font-size: 0.95rem;
+  color: var(--color-text-dim);
+  margin: 0;
+  max-width: 400px;
+}
+
 @media (max-width: 768px) {
   .game-title {
     font-size: 2.5rem;
@@ -102,5 +165,19 @@
   .play-button {
     font-size: 1.3rem;
     padding: 16px 40px;
+  }
+
+  .more-packs-button {
+    position: static;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  .pack-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .pack-selected {
+    font-size: 0.8rem;
   }
 }

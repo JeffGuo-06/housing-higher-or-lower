@@ -1,16 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Analytics } from '@vercel/analytics/react'
+import { DEV } from './config'
 import Navbar from './components/Navbar'
 import HomeScreen from './components/HomeScreen'
 import GameScreen from './components/GameScreen'
 import GameOver from './components/GameOver'
 import LeaderboardPage from './components/LeaderboardPage'
+import DevPage from './components/DevPage'
 import './styles/App.css'
 
 function App() {
-  const [gameState, setGameState] = useState('home') // 'home', 'playing', 'gameOver', 'leaderboard'
+  const [gameState, setGameState] = useState('home') // 'home', 'playing', 'gameOver', 'leaderboard', 'dev'
   const [finalScore, setFinalScore] = useState(0)
   const [finalTotalGuesses, setFinalTotalGuesses] = useState(0)
+  const [selectedPackId, setSelectedPackId] = useState(2) // Default to Pack 2
+
+  useEffect(() => {
+    // Check if we're on /dev path
+    if (DEV && window.location.pathname === '/dev') {
+      setGameState('dev')
+    }
+  }, [])
 
   const handleStartGame = () => {
     setGameState('playing')
@@ -22,6 +32,10 @@ function App() {
     setFinalScore(score)
     setFinalTotalGuesses(totalGuesses)
     setGameState('gameOver')
+  }
+
+  const handleSelectPack = (packId) => {
+    setSelectedPackId(packId)
   }
   const handlePlayAgain = () => {
     setGameState('playing')
@@ -48,11 +62,16 @@ function App() {
         {gameState === 'home' && (
           <HomeScreen
             onStartGame={handleStartGame}
+            selectedPackId={selectedPackId}
+            onSelectPack={handleSelectPack}
           />
         )}
 
         {gameState === 'playing' && (
-          <GameScreen onGameOver={handleGameOver} />
+          <GameScreen
+            onGameOver={handleGameOver}
+            packId={selectedPackId}
+          />
         )}
 
         {gameState === 'gameOver' && (
@@ -61,11 +80,19 @@ function App() {
             totalGuesses={finalTotalGuesses}
             onPlayAgain={handlePlayAgain}
             onViewLeaderboard={handleViewLeaderboard}
+            packId={selectedPackId}
           />
         )}
 
         {gameState === 'leaderboard' && (
-          <LeaderboardPage onBack={handleBackToHome} />
+          <LeaderboardPage
+            onBack={handleBackToHome}
+            packId={selectedPackId}
+          />
+        )}
+
+        {gameState === 'dev' && DEV && (
+          <DevPage onBack={handleBackToHome} />
         )}
       </div>
       <Analytics />
