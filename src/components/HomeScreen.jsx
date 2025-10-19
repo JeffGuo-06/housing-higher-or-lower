@@ -5,8 +5,9 @@ import '../styles/HomeScreen.css'
 export default function HomeScreen({ onStartGame, selectedPackId, onSelectPack }) {
   const [showPackSelector, setShowPackSelector] = useState(false)
 
-  const handleSelectPack = (packId) => {
+  const handleSelectPackAndPlay = (packId) => {
     onSelectPack(packId)
+    onStartGame()
   }
 
   const getPackName = (packId) => {
@@ -46,7 +47,7 @@ export default function HomeScreen({ onStartGame, selectedPackId, onSelectPack }
         isOpen={showPackSelector}
         onClose={() => setShowPackSelector(false)}
         currentPackId={selectedPackId}
-        onSelectPack={handleSelectPack}
+        onSelectPack={handleSelectPackAndPlay}
       />
     </div>
   )

@@ -10,6 +10,7 @@ export default function Leaderboard({ limit = 10, showTitle = true, packId = 2 }
   const [displayLimit, setDisplayLimit] = useState(limit)
   const [hasMore, setHasMore] = useState(false)
   const [loadingMore, setLoadingMore] = useState(false)
+  const [fullscreenSelfie, setFullscreenSelfie] = useState(null)
 
   useEffect(() => {
     fetchLeaderboard()
@@ -66,6 +67,16 @@ export default function Leaderboard({ limit = 10, showTitle = true, packId = 2 }
     })
   }
 
+  const handleSelfieClick = (selfieUrl, playerName) => {
+    if (selfieUrl) {
+      setFullscreenSelfie({ url: selfieUrl, name: playerName })
+    }
+  }
+
+  const handleCloseFullscreen = () => {
+    setFullscreenSelfie(null)
+  }
+
   if (loading) {
     return <div className="leaderboard-loading">Loading leaderboard...</div>
   }
@@ -96,8 +107,24 @@ export default function Leaderboard({ limit = 10, showTitle = true, packId = 2 }
               {index + 1}.
             </div>
             <div className="player-info">
-              <div className="player-name">{score.player_name}</div>
-              <div className="player-date">{formatDate(score.created_at)}</div>
+              {score.selfie_url ? (
+                <img
+                  src={score.selfie_url}
+                  alt={`${score.player_name}'s selfie`}
+                  className="player-selfie clickable"
+                  onClick={() => handleSelfieClick(score.selfie_url, score.player_name)}
+                />
+              ) : (
+                <div className="player-selfie placeholder">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                  </svg>
+                </div>
+              )}
+              <div className="player-details">
+                <div className="player-name">{score.player_name}</div>
+                <div className="player-date">{formatDate(score.created_at)}</div>
+              </div>
             </div>
             <div className="score-info">
               <CardIcon className="score-icon-small" />
@@ -115,6 +142,20 @@ export default function Leaderboard({ limit = 10, showTitle = true, packId = 2 }
         >
           {loadingMore ? 'Loading...' : 'Show More'}
         </button>
+      )}
+
+      {fullscreenSelfie && (
+        <div className="selfie-fullscreen-overlay" onClick={handleCloseFullscreen}>
+          <div className="selfie-fullscreen-container">
+            <img
+              src={fullscreenSelfie.url}
+              alt={`${fullscreenSelfie.name}'s selfie`}
+              className="selfie-fullscreen"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button className="close-fullscreen" onClick={handleCloseFullscreen}>×</button>
+          </div>
+        </div>
       )}
     </div>
   )

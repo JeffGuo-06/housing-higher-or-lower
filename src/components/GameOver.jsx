@@ -128,19 +128,19 @@ export default function GameOver({ score, totalGuesses, onPlayAgain, onViewLeade
             <div className="percentile-display">
               {percentile === 100 ? (
                 <p className="percentile-text first-score">
-                  🎉 You're the first player! Set the bar high!
+                  You've beaten 100% of all other submissions, holy aura
                 </p>
               ) : percentile >= 90 ? (
                 <p className="percentile-text top-tier">
-                  🔥 Your run beats <strong>{percentile}%</strong> of all other leaderboard entries!
+                  Your run beats <strong>{percentile}%</strong> of all other leaderboard entries!
                 </p>
               ) : percentile >= 70 ? (
                 <p className="percentile-text good">
-                  💪 Your run beats <strong>{percentile}%</strong> of all other leaderboard entries!
+                  Your run beats <strong>{percentile}%</strong> of all other leaderboard entries!
                 </p>
               ) : percentile >= 50 ? (
                 <p className="percentile-text average">
-                  📊 Your run beats <strong>{percentile}%</strong> of all other leaderboard entries!
+                  Your run beats <strong>{percentile}%</strong> of all other leaderboard entries!
                 </p>
               ) : (
                 <p className="percentile-text below-average">

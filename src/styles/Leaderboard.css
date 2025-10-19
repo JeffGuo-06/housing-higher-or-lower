@@ -73,6 +73,46 @@
 
 .player-info {
   flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.player-selfie {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.player-selfie.clickable {
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.player-selfie.clickable:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.player-selfie.placeholder {
+  background: var(--color-bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-dim);
+}
+
+.player-selfie.placeholder svg {
+  width: 24px;
+  height: 24px;
+}
+
+.player-details {
+  flex: 1;
+  min-width: 0;
 }
 
 .player-name {
@@ -80,6 +120,9 @@
   font-weight: 600;
   color: var(--color-text);
   margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .player-date {
@@ -155,6 +198,20 @@
     font-size: 1.2rem;
   }
 
+  .player-selfie {
+    width: 40px;
+    height: 40px;
+  }
+
+  .player-selfie.placeholder svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .player-info {
+    gap: 8px;
+  }
+
   .player-name {
     font-size: 1rem;
   }
@@ -171,5 +228,75 @@
   .show-more-button {
     padding: 12px 24px;
     font-size: 1rem;
+  }
+}
+
+/* Fullscreen Selfie Viewer */
+.selfie-fullscreen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+  animation: fadeIn 0.2s ease-out;
+  cursor: pointer;
+}
+
+.selfie-fullscreen-container {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selfie-fullscreen {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  cursor: default;
+  animation: slideUp 0.3s ease-out;
+}
+
+.close-fullscreen {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  line-height: 0;
+  padding: 0;
+  padding-bottom: 5px;
+}
+
+.close-fullscreen:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: rotate(90deg);
+}
+
+@media (max-width: 768px) {
+  .close-fullscreen {
+    top: 10px;
+    right: 10px;
   }
 }

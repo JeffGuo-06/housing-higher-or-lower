@@ -83,11 +83,17 @@ export default function SelfieCapture({ isOpen, onClose, onSkip, onCapture, play
     }, 'image/jpeg', 0.9)
   }
 
-  const handleRetake = () => {
-    setCapturedImage(null)
+  const handleRetake = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+
     if (capturedImage?.url) {
       URL.revokeObjectURL(capturedImage.url)
     }
+    setCapturedImage(null)
+
+    // Camera should still be running since we don't stop it on capture
+    // Just clear the captured image to show the video feed again
   }
 
   const handleUpload = async () => {
@@ -143,11 +149,11 @@ export default function SelfieCapture({ isOpen, onClose, onSkip, onCapture, play
   if (!isOpen) return null
 
   return (
-    <div className="modal-overlay" onClick={handleSkipClick}>
-      <div className="modal-content selfie-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay">
+      <div className="modal-content selfie-modal">
         <div className="modal-header">
           <h2>Take a Victory Selfie! 📸</h2>
-          <button className="modal-close" onClick={handleSkipClick}>×</button>
+          <button type="button" className="modal-close" onClick={handleSkipClick}>×</button>
         </div>
 
         <div className="modal-body">
@@ -160,20 +166,18 @@ export default function SelfieCapture({ isOpen, onClose, onSkip, onCapture, play
           )}
 
           <div className="camera-container">
-            {!capturedImage ? (
-              <>
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  playsInline
-                  muted
-                  className={`video-preview ${cameraReady ? 'ready' : ''}`}
-                />
-                {!cameraReady && !error && (
-                  <div className="camera-loading">Starting camera...</div>
-                )}
-              </>
-            ) : (
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              className={`video-preview ${cameraReady ? 'ready' : ''}`}
+              style={{ display: capturedImage ? 'none' : 'block' }}
+            />
+            {!cameraReady && !error && !capturedImage && (
+              <div className="camera-loading">Starting camera...</div>
+            )}
+            {capturedImage && (
               <img
                 src={capturedImage.url}
                 alt="Captured selfie"
@@ -189,19 +193,21 @@ export default function SelfieCapture({ isOpen, onClose, onSkip, onCapture, play
             {!capturedImage ? (
               <>
                 <button
+                  type="button"
                   className="capture-button"
                   onClick={handleCapture}
                   disabled={!cameraReady || uploading}
                 >
                   📸 Capture
                 </button>
-                <button className="skip-button" onClick={handleSkipClick}>
+                <button type="button" className="skip-button" onClick={handleSkipClick}>
                   Skip
                 </button>
               </>
             ) : (
               <>
                 <button
+                  type="button"
                   className="upload-button"
                   onClick={handleUpload}
                   disabled={uploading}
@@ -209,6 +215,7 @@ export default function SelfieCapture({ isOpen, onClose, onSkip, onCapture, play
                   {uploading ? 'Uploading...' : '✓ Use This Photo'}
                 </button>
                 <button
+                  type="button"
                   className="retake-button"
                   onClick={handleRetake}
                   disabled={uploading}
